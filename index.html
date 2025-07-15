@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operación Chuletón</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Bangers&family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --color-fondo: #111827; /* Azul noche muy oscuro */
+            --color-panel: #1F2937; /* Gris azulado oscuro */
+            --color-borde: #FBBF24; /* Ámbar/Oro */
+            --color-texto: #E5E7EB; /* Gris claro */
+            --color-titulo: #FBBF24;
+            --color-exito: #34D399; /* Verde esmeralda */
+            --color-error: #F87171; /* Rojo claro */
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--color-texto);
+            text-align: center;
+        }
+
+        .contenedor-mision {
+            background-color: var(--color-panel);
+            border: 2px solid var(--color-borde);
+            border-radius: 15px;
+            padding: clamp(1rem, 5vw, 2.5rem);
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.2);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            animation: aparecer 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .contenedor-mision.activo {
+            display: flex;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .sello-top-secret {
+            font-family: 'Bangers', cursive;
+            color: var(--color-error);
+            border: 5px solid var(--color-error);
+            padding: 5px 15px;
+            font-size: 1.5rem;
+            transform: rotate(-10deg);
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        h1, h2 {
+            font-family: 'Bangers', cursive;
+            color: var(--color-titulo);
+            text-shadow: 2px 2px 0px #000;
+            margin: 0 0 15px 0;
+            letter-spacing: 1px;
+        }
+
+        h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
+        h2 { font-size: clamp(1.5rem, 6vw, 2.5rem); }
+
+        p {
+            font-family: 'Special Elite', monospace;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        .boton-mision {
+            font-family: 'Bangers', cursive;
+            font-size: 1.5rem;
+            padding: 12px 35px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 10px;
+            background: var(--color-borde);
+            color: #111827;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .boton-mision:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+            filter: brightness(1.1);
+        }
+
+        .campo-respuesta {
+            font-family: 'Special Elite', monospace;
+            background-color: var(--color-texto);
+            color: var(--color-fondo);
+            border: 2px solid var(--color-borde);
+            border-radius: 5px;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            width: 80%;
+            max-width: 300px;
+            text-transform: uppercase;
+        }
+
+        /* --- Mapa --- */
+        #mapa-container {
+            position: relative;
+            cursor: crosshair;
+            margin-top: 20px;
+            max-width: 500px; /* Limita el tamaño del mapa */
+            width: 100%;
+        }
+        #mapa-espana {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            filter: grayscale(1) sepia(0.3);
+            background-color: #333; /* Color de fondo mientras carga el SVG */
+        }
+
+        /* --- Bóveda Final --- */
+        #boveda-display {
+            display: flex;
+            flex-wrap: wrap; /* Para que se ajuste en pantallas pequeñas */
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        .letra-display {
+            width: 45px;
+            height: 55px;
+            background-color: #111827;
+            border: 2px solid var(--color-borde);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Bangers', cursive;
+            font-size: 2.2rem;
+            color: var(--color-exito);
+        }
+        
+        #boveda-controles {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #boveda-controles button {
+            font-family: 'Bangers';
+            width: 50px;
+            height: 50px;
+            font-size: 1.8rem;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--color-borde);
+            color: var(--color-fondo);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Sorpresa --- */
+        #paso-final img {
+            max-width: 90%;
+            width: 500px;
+            border-radius: 15px;
+            border: 5px solid var(--color-borde);
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
+            margin-top: 20px;
+        }
+        
+        #paso-final h1 { color: var(--color-exito); }
+        #paso-final p strong { color: var(--color-borde); font-family: 'Bangers'; font-size: 1.5em; }
+
+        .mensaje-feedback {
+            font-family: 'Special Elite', monospace;
+            margin-top: 15px;
+            height: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+        .error { color: var(--color-error); }
+        .exito { color: var(--color-exito); }
+
+        /* --- Confeti --- */
+        .confeti-contenedor { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+        .confeti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; animation: caer 5s linear forwards; border-radius: 50%; }
+        @keyframes caer { 0% { transform: translateY(-100px); opacity: 1; } 100% { transform: translateY(110vh); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div class="confeti-contenedor" id="confeti-contenedor"></div>
+
+    <!-- PASO 1: INTRODUCCIÓN -->
+    <div class="contenedor-mision activo" id="paso-1">
+        <div class="sello-top-secret">TOP SECRET</div>
+        <h1>Operación Chuletón</h1>
+        <p>Agentes, hemos interceptado una comunicación enemiga sobre un objetivo de valor incalculable. Vuestra misión, si decidís aceptarla, es descifrar tres niveles de seguridad para revelar la naturaleza de la operación. El éxito depende de vuestro ingenio. ¿Estáis dentro?</p>
+        <button class="boton-mision" onclick="avanzarPaso(2)">Aceptar Misión</button>
+    </div>
+
+    <!-- PASO 2: ACERTIJO -->
+    <div class="contenedor-mision" id="paso-2">
+        <h2>Nivel 1: El Enigma</h2>
+        <p>La primera clave está oculta en este acertijo. El objetivo es famoso por su carne. Procede de un animal grande y fuerte, con cuernos, pero que no es un toro de lidia ni una vaca común. Escribid el nombre de este animal (4 letras).</p>
+        <input type="text" id="respuesta-acertijo" class="campo-respuesta" maxlength="4" autocomplete="off">
+        <button class="boton-mision" onclick="verificarAcertijo()">Verificar Clave</button>
+        <p class="mensaje-feedback" id="feedback-2"></p>
+    </div>
+    
+    <!-- PASO 3: MAPA -->
+    <div class="contenedor-mision" id="paso-3">
+        <h2>Nivel 2: Coordenadas</h2>
+        <p>¡Clave aceptada! El objetivo se encuentra en una región específica de España. Haced clic en el mapa sobre la comunidad autónoma de Castilla y León para triangular la posición.</p>
+        <div id="mapa-container">
+            <!-- MAPA CORREGIDO: Se ha reemplazado la URL externa por datos SVG incrustados para garantizar la carga. -->
+            <img id="mapa-espana" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 620'><path fill='%23cccccc' d='M225,120 l-30,15 l-20,30 l-15,30 l10,20 l20,15 l30,5 l20,-10 l15,-20 l-5,-30 l-10,-30 l-15,-20 z' /><path fill='%23bbbbbb' d='M195,120 l-20,-10 l-30,0 l-15,10 l-10,20 l-5,30 l10,15 l25,0 l20,-15 l15,-20 l5,-25 z' /><path id='castilla-y-leon' fill='%23aaaaaa' d='M225,200 l-30,15 l-20,30 l-15,30 l10,20 l20,15 l30,5 l20,-10 l15,-20 l5,-30 l-10,-30 l-15,-20 l-5,-5 l50,10 l60,-10 l30,-20 l20,-40 l-10,-30 l-30,-10 l-40,10 l-50,20 l-30,30 z' /><path fill='%23bbbbbb' d='M400,150 l-30,20 l-20,30 l0,40 l20,30 l30,10 l40,-10 l30,-20 l10,-40 l-10,-30 l-30,-20 l-40,-10 z' /><path fill='%23cccccc' d='M350,300 l-20,30 l0,40 l20,30 l40,20 l50,0 l40,-20 l20,-30 l0,-40 l-20,-30 l-40,-20 l-50,0 z' /><path fill='%23aaaaaa' d='M180,350 l-40,10 l-30,30 l-10,40 l20,30 l40,10 l50,-10 l30,-30 l0,-40 l-20,-30 l-40,-10 z' /><path fill='%23bbbbbb' d='M250,450 l-30,10 l-20,20 l10,30 l30,10 l40,-10 l20,-20 l-10,-30 l-30,-10 z' /><path fill='%23cccccc' d='M450,400 l50,20 l20,40 l-10,30 l-40,10 l-50,-20 l-20,-40 l10,-30 z' /><path fill='%23aaaaaa' d='M550,100 l50,50 l20,60 l-20,40 l-50,30 l-40,-20 l-30,-50 l10,-60 l20,-50 z' /><path fill='%23bbbbbb' d='M600,300 l40,30 l10,50 l-30,40 l-50,10 l-30,-30 l-10,-50 l30,-40 z' /></svg>" alt="Mapa de España" onclick="verificarMapa(event)">
+        </div>
+        <p class="mensaje-feedback" id="feedback-3"></p>
+    </div>
+
+    <!-- PASO 4: BÓVEDA -->
+    <div class="contenedor-mision" id="paso-4">
+        <h2>Nivel Final: La Bóveda</h2>
+        <p>¡Posición triangulada! Solo queda una barrera. La contraseña de la bóveda es el nombre en clave de la operación, un auténtico... (8 letras)</p>
+        <div id="boveda-display"></div>
+        <div id="boveda-controles">
+            <button id="prev-letra">&uarr;</button>
+            <button id="next-letra">&darr;</button>
+        </div>
+        <button class="boton-mision" onclick="verificarBoveda()">Abrir Bóveda</button>
+        <p class="mensaje-feedback" id="feedback-4"></p>
+    </div>
+
+    <!-- PASO FINAL: SORPRESA -->
+    <div class="contenedor-mision" id="paso-final">
+        <h1>¡¡ACCESO CONCEDIDO!!</h1>
+        <h2>¡¡MISIÓN CUMPLIDA, AGENTES!!</h2>
+        <p>El objetivo de la operación es... ¡Un viaje sorpresa para comer la mejor carne del mundo a la Bodega <strong>"El Capricho"</strong> en León!</p>
+        <img src="https://www.bodegaelcapricho.com/wp-content/uploads/2021/03/el-capricho-templo-de-la-carne-1.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x400/c0392b/FFFFFF?text=El+Capricho';" alt="Imagen de un chuletón de buey de El Capricho">
+    </div>
+
+    <script>
+        let pasoActual = 1;
+
+        function avanzarPaso(numeroPaso) {
+            document.querySelector('.contenedor-mision.activo').classList.remove('activo');
+            document.getElementById(`paso-${numeroPaso}`).classList.add('activo');
+            pasoActual = numeroPaso;
+        }
+
+        function mostrarFeedback(paso, mensaje, esError = true) {
+            const feedbackEl = document.getElementById(`feedback-${paso}`);
+            feedbackEl.textContent = mensaje;
+            feedbackEl.className = 'mensaje-feedback ' + (esError ? 'error' : 'exito');
+        }
+
+        // --- Lógica Paso 2: Acertijo ---
+        function verificarAcertijo() {
+            const respuesta = document.getElementById('respuesta-acertijo').value.toUpperCase();
+            if (respuesta === 'BUEY') {
+                mostrarFeedback(2, 'CLAVE CORRECTA. PROCEDIENDO...', false);
+                setTimeout(() => avanzarPaso(3), 1500);
+            } else {
+                mostrarFeedback(2, 'CLAVE INCORRECTA. INTÉNTALO DE NUEVO.');
+                document.getElementById('respuesta-acertijo').value = '';
+            }
+        }
+
+        // --- Lógica Paso 3: Mapa ---
+        function verificarMapa(event) {
+            const elMapa = event.currentTarget;
+            const rect = elMapa.getBoundingClientRect();
+            // Coordenadas relativas al clic dentro del elemento (en %)
+            const x = (event.clientX - rect.left) / rect.width * 100;
+            const y = (event.clientY - rect.top) / rect.height * 100;
+
+            // Coordenadas aproximadas de Castilla y León en este mapa SVG
+            // El área es un polígono irregular, estas coordenadas definen un rectángulo que lo contiene.
+            const esCorrecto = (x > 20 && x < 58 && y > 28 && y < 55);
+
+            if (esCorrecto) {
+                mostrarFeedback(3, 'POSICIÓN CONFIRMADA. DESBLOQUEANDO NIVEL FINAL...', false);
+                elMapa.style.cursor = 'default';
+                elMapa.onclick = null; // Desactivar más clics
+                setTimeout(() => avanzarPaso(4), 1500);
+            } else {
+                mostrarFeedback(3, 'SEÑAL DÉBIL. APUNTA A OTRA ZONA.');
+            }
+        }
+        
+        // --- Lógica Paso 4: Bóveda ---
+        const codigoBoveda = "CAPRICHO";
+        const alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let estadoBoveda = Array(codigoBoveda.length).fill(0);
+        let letraActiva = 0;
+        const bovedaDisplay = document.getElementById('boveda-display');
+
+        function inicializarBoveda() {
+            // Limpiar por si se reinicia
+            bovedaDisplay.innerHTML = '';
+            for (let i = 0; i < codigoBoveda.length; i++) {
+                const letraDiv = document.createElement('div');
+                letraDiv.className = 'letra-display';
+                letraDiv.id = `letra-${i}`;
+                letraDiv.textContent = alfabeto[0];
+                letraDiv.dataset.index = i;
+                bovedaDisplay.appendChild(letraDiv);
+            }
+            actualizarFocoLetra();
+        }
+
+        function actualizarFocoLetra() {
+            document.querySelectorAll('.letra-display').forEach((el, idx) => {
+                el.style.borderColor = (idx === letraActiva) ? 'white' : 'var(--color-borde)';
+                el.style.boxShadow = (idx === letraActiva) ? '0 0 15px white' : 'none';
+            });
+        }
+        
+        function cambiarLetra(direccion) {
+            estadoBoveda[letraActiva] = (estadoBoveda[letraActiva] + direccion + alfabeto.length) % alfabeto.length;
+            document.getElementById(`letra-${letraActiva}`).textContent = alfabeto[estadoBoveda[letraActiva]];
+        }
+        
+        document.getElementById('prev-letra').onclick = () => cambiarLetra(-1);
+        document.getElementById('next-letra').onclick = () => cambiarLetra(1);
+        
+        bovedaDisplay.addEventListener('click', (e) => {
+            if (e.target.classList.contains('letra-display') && e.target.dataset.index) {
+                letraActiva = parseInt(e.target.dataset.index);
+                actualizarFocoLetra();
+            }
+        });
+
+        function verificarBoveda() {
+            const intento = estadoBoveda.map(i => alfabeto[i]).join('');
+            if (intento === codigoBoveda) {
+                mostrarFeedback(4, 'BÓVEDA ABIERTA. REVELANDO OBJETIVO...', false);
+                setTimeout(() => avanzarPaso('final'), 1500);
+                lanzarConfeti();
+            } else {
+                mostrarFeedback(4, 'CONTRASEÑA INCORRECTA. SISTEMA DE SEGURIDAD ACTIVADO.');
+            }
+        }
+
+        // --- Confeti ---
+        function lanzarConfeti() {
+            const contenedor = document.getElementById('confeti-contenedor');
+            const colores = ['#FBBF24', '#F87171', '#34D399', '#60A5FA', '#E5E7EB'];
+            for (let i = 0; i < 150; i++) {
+                const confeti = document.createElement('div');
+                confeti.classList.add('confeti');
+                confeti.style.left = Math.random() * 100 + 'vw';
+                confeti.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+                confeti.style.animationDelay = Math.random() * 2 + 's';
+                confeti.style.transform = `scale(${Math.random() * 1.2 + 0.5})`;
+                contenedor.appendChild(confeti);
+            }
+        }
+        
+        // Inicializar la bóveda cuando se carga el script
+        inicializarBoveda();
+
+    </script>
+</body>
+</html>
