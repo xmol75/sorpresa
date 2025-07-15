@@ -8,13 +8,13 @@
         @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Bangers&family=Roboto:wght@400;700&display=swap');
 
         :root {
-            --color-fondo: #111827; /* Azul noche muy oscuro */
-            --color-panel: #1F2937; /* Gris azulado oscuro */
-            --color-borde: #FBBF24; /* Ámbar/Oro */
-            --color-texto: #E5E7EB; /* Gris claro */
+            --color-fondo: #111827;
+            --color-panel: #1F2937;
+            --color-borde: #FBBF24;
+            --color-texto: #E5E7EB;
             --color-titulo: #FBBF24;
-            --color-exito: #34D399; /* Verde esmeralda */
-            --color-error: #F87171; /* Rojo claro */
+            --color-exito: #34D399;
+            --color-error: #F87171;
         }
 
         body {
@@ -53,17 +53,6 @@
             to { opacity: 1; transform: scale(1); }
         }
         
-        .sello-top-secret {
-            font-family: 'Bangers', cursive;
-            color: var(--color-error);
-            border: 5px solid var(--color-error);
-            padding: 5px 15px;
-            font-size: 1.5rem;
-            transform: rotate(-10deg);
-            margin-bottom: 20px;
-            opacity: 0.8;
-        }
-
         h1, h2 {
             font-family: 'Bangers', cursive;
             color: var(--color-titulo);
@@ -101,6 +90,55 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.5);
             filter: brightness(1.1);
         }
+        
+        .opciones-respuesta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .boton-opcion {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 15px 20px;
+            border: 2px solid var(--color-borde);
+            border-radius: 10px;
+            background-color: transparent;
+            color: var(--color-borde);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 200px;
+        }
+        
+        .boton-opcion:hover {
+            background-color: var(--color-borde);
+            color: var(--color-panel);
+        }
+        
+        .opciones-respuesta-img {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .opciones-respuesta-img img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid var(--color-borde);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background-color: #333;
+        }
+        .opciones-respuesta-img img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--color-borde);
+        }
 
         .campo-respuesta {
             font-family: 'Special Elite', monospace;
@@ -117,26 +155,18 @@
             text-transform: uppercase;
         }
 
-        /* --- Mapa --- */
-        #mapa-container {
-            position: relative;
-            cursor: crosshair;
-            margin-top: 20px;
-            max-width: 500px; /* Limita el tamaño del mapa */
-            width: 100%;
+        .imagen-pista {
+            max-width: 90%;
+            width: 400px;
+            border-radius: 15px;
+            border: 5px solid var(--color-borde);
+            margin: 20px 0;
+            background-color: #333;
         }
-        #mapa-espana {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            filter: grayscale(1) sepia(0.3);
-            background-color: #333; /* Color de fondo mientras carga el SVG */
-        }
-
-        /* --- Bóveda Final --- */
+        
         #boveda-display {
             display: flex;
-            flex-wrap: wrap; /* Para que se ajuste en pantallas pequeñas */
+            flex-wrap: wrap;
             gap: 10px;
             margin: 20px 0;
             justify-content: center;
@@ -175,15 +205,26 @@
             justify-content: center;
             align-items: center;
         }
-
-        /* --- Sorpresa --- */
-        #paso-final img {
-            max-width: 90%;
-            width: 500px;
-            border-radius: 15px;
-            border: 5px solid var(--color-borde);
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
+        
+        #paso-final .logo-final {
+            max-width: 80%;
+            max-height: 150px;
+            margin-bottom: 20px;
+        }
+        
+        #paso-final .galeria-final {
+            display: flex;
+            gap: 10px;
             margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #paso-final .galeria-final img {
+            width: 100%;
+            max-width: 220px;
+            border-radius: 10px;
+            border: 2px solid var(--color-borde);
+            background-color: #333;
         }
         
         #paso-final h1 { color: var(--color-exito); }
@@ -199,7 +240,6 @@
         .error { color: var(--color-error); }
         .exito { color: var(--color-exito); }
 
-        /* --- Confeti --- */
         .confeti-contenedor { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
         .confeti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; animation: caer 5s linear forwards; border-radius: 50%; }
         @keyframes caer { 0% { transform: translateY(-100px); opacity: 1; } 100% { transform: translateY(110vh); opacity: 0; } }
@@ -211,59 +251,95 @@
 
     <!-- PASO 1: INTRODUCCIÓN -->
     <div class="contenedor-mision activo" id="paso-1">
-        <div class="sello-top-secret">TOP SECRET</div>
-        <h1>Operación Chuletón</h1>
-        <p>Agentes, hemos interceptado una comunicación enemiga sobre un objetivo de valor incalculable. Vuestra misión, si decidís aceptarla, es descifrar tres niveles de seguridad para revelar la naturaleza de la operación. El éxito depende de vuestro ingenio. ¿Estáis dentro?</p>
+        <h1>Operación Cultural</h1>
+        <p>Agentes, hemos detectado una oportunidad única para una misión de enriquecimiento cultural intensivo. El objetivo es un tesoro nacional. Para localizarlo, debéis superar una serie de pruebas de conocimiento. ¿Aceptáis el desafío?</p>
         <button class="boton-mision" onclick="avanzarPaso(2)">Aceptar Misión</button>
     </div>
 
-    <!-- PASO 2: ACERTIJO -->
+    <!-- PASO 2: CATEDRAL DE LEÓN -->
     <div class="contenedor-mision" id="paso-2">
-        <h2>Nivel 1: El Enigma</h2>
-        <p>La primera clave está oculta en este acertijo. El objetivo es famoso por su carne. Procede de un animal grande y fuerte, con cuernos, pero que no es un toro de lidia ni una vaca común. Escribid el nombre de este animal (4 letras).</p>
-        <input type="text" id="respuesta-acertijo" class="campo-respuesta" maxlength="4" autocomplete="off">
-        <button class="boton-mision" onclick="verificarAcertijo()">Verificar Clave</button>
+        <h2>Nivel 1: La Joya Gótica</h2>
+        <img src="https://raw.githubusercontent.com/xmol75/sorpresa/main/catedral.jpeg" class="imagen-pista" alt="Catedral de León">
+        <p>Nuestra primera parada es León. Su catedral es una obra maestra del gótico. ¿Con qué apodo se la conoce popularmente por sus 1.800 metros cuadrados de impresionantes vidrieras?</p>
+        <div class="opciones-respuesta">
+            <button class="boton-opcion" onclick="mostrarFeedback(2, 'INCORRECTO. ESA ES OTRA GRAN OBRA.')">La Dama de Piedra</button>
+            <button class="boton-opcion" onclick="verificarRespuesta(2, 'PULCHRA LEONINA')">La Pulchra Leonina</button>
+            <button class="boton-opcion" onclick="mostrarFeedback(2, 'NEGATIVO. INTENTA DE NUEVO.')">La Casa de Luz</button>
+        </div>
         <p class="mensaje-feedback" id="feedback-2"></p>
     </div>
     
-    <!-- PASO 3: MAPA -->
+    <!-- PASO 3: PALACIO DE ASTORGA -->
     <div class="contenedor-mision" id="paso-3">
-        <h2>Nivel 2: Coordenadas</h2>
-        <p>¡Clave aceptada! El objetivo se encuentra en una región específica de España. Haced clic en el mapa sobre la comunidad autónoma de Castilla y León para triangular la posición.</p>
-        <div id="mapa-container">
-            <!-- MAPA CORREGIDO: Se ha reemplazado la URL externa por datos SVG incrustados para garantizar la carga. -->
-            <img id="mapa-espana" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 620'><path fill='%23cccccc' d='M225,120 l-30,15 l-20,30 l-15,30 l10,20 l20,15 l30,5 l20,-10 l15,-20 l-5,-30 l-10,-30 l-15,-20 z' /><path fill='%23bbbbbb' d='M195,120 l-20,-10 l-30,0 l-15,10 l-10,20 l-5,30 l10,15 l25,0 l20,-15 l15,-20 l5,-25 z' /><path id='castilla-y-leon' fill='%23aaaaaa' d='M225,200 l-30,15 l-20,30 l-15,30 l10,20 l20,15 l30,5 l20,-10 l15,-20 l5,-30 l-10,-30 l-15,-20 l-5,-5 l50,10 l60,-10 l30,-20 l20,-40 l-10,-30 l-30,-10 l-40,10 l-50,20 l-30,30 z' /><path fill='%23bbbbbb' d='M400,150 l-30,20 l-20,30 l0,40 l20,30 l30,10 l40,-10 l30,-20 l10,-40 l-10,-30 l-30,-20 l-40,-10 z' /><path fill='%23cccccc' d='M350,300 l-20,30 l0,40 l20,30 l40,20 l50,0 l40,-20 l20,-30 l0,-40 l-20,-30 l-40,-20 l-50,0 z' /><path fill='%23aaaaaa' d='M180,350 l-40,10 l-30,30 l-10,40 l20,30 l40,10 l50,-10 l30,-30 l0,-40 l-20,-30 l-40,-10 z' /><path fill='%23bbbbbb' d='M250,450 l-30,10 l-20,20 l10,30 l30,10 l40,-10 l20,-20 l-10,-30 l-30,-10 z' /><path fill='%23cccccc' d='M450,400 l50,20 l20,40 l-10,30 l-40,10 l-50,-20 l-20,-40 l10,-30 z' /><path fill='%23aaaaaa' d='M550,100 l50,50 l20,60 l-20,40 l-50,30 l-40,-20 l-30,-50 l10,-60 l20,-50 z' /><path fill='%23bbbbbb' d='M600,300 l40,30 l10,50 l-30,40 l-50,10 l-30,-30 l-10,-50 l30,-40 z' /></svg>" alt="Mapa de España" onclick="verificarMapa(event)">
+        <h2>Nivel 2: El Genio Modernista</h2>
+        <img src="https://raw.githubusercontent.com/xmol75/sorpresa/main/episcopal.jpg" class="imagen-pista" alt="Palacio Episcopal de Astorga">
+        <p>Nos desviamos a Astorga. Este edificio parece un castillo de cuento de hadas y fue diseñado por un arquitecto catalán universalmente famoso. ¿Quién fue el genio detrás de esta obra?</p>
+        <div class="opciones-respuesta">
+            <button class="boton-opcion" onclick="mostrarFeedback(3, 'ERROR. ESE ARQUITECTO ES MÁS RECIENTE.')">Santiago Calatrava</button>
+            <button class="boton-opcion" onclick="verificarRespuesta(3, 'GAUDI')">Antoni Gaudí</button>
+            <button class="boton-opcion" onclick="mostrarFeedback(3, 'PISTA FALSA. SIGUE BUSCANDO.')">Juan de Villanueva</button>
         </div>
         <p class="mensaje-feedback" id="feedback-3"></p>
     </div>
 
-    <!-- PASO 4: BÓVEDA -->
+    <!-- PASO 4: ESTATUS DE CATEDRAL -->
     <div class="contenedor-mision" id="paso-4">
-        <h2>Nivel Final: La Bóveda</h2>
-        <p>¡Posición triangulada! Solo queda una barrera. La contraseña de la bóveda es el nombre en clave de la operación, un auténtico... (8 letras)</p>
+        <h2>Nivel 3: Rango Eclesiástico</h2>
+        <p>Información clave: tanto León como Astorga tienen catedrales. Para que una iglesia reciba el estatus de 'Catedral', debe ser la sede de una de estas figuras. ¡Selecciona la correcta!</p>
+        <div class="opciones-respuesta-img">
+            <img src="https://raw.githubusercontent.com/xmol75/sorpresa/main/papa.jpg" alt="Opción Papa" onclick="mostrarFeedback(4, 'INCORRECTO. ESA FIGURA RESIDE EN EL VATICANO.')">
+            <img src="https://raw.githubusercontent.com/xmol75/sorpresa/main/cardenal.jpg" alt="Opción Cardenal" onclick="mostrarFeedback(4, 'NEGATIVO. TIENEN OTRO RANGO.')">
+            <img src="https://raw.githubusercontent.com/xmol75/sorpresa/main/obispo.jpg" alt="Opción Obispo" onclick="verificarRespuesta(4, 'OBISPO')">
+        </div>
+        <p class="mensaje-feedback" id="feedback-4"></p>
+    </div>
+
+    <!-- PASO 5: EL ANIMAL -->
+    <div class="contenedor-mision" id="paso-5">
+        <h2>Nivel 4: La Fuerza de la Tierra</h2>
+        <p>¡Excelente! La misión se vuelve gastronómica. En León, se venera la carne de un animal rumiante, grande y fuerte, famoso por su sabor excepcional. No es un toro. ¿Qué animal es?</p>
+        <input type="text" id="respuesta-paso-5" class="campo-respuesta" placeholder="Escribe aquí..." autocomplete="off">
+        <button class="boton-mision" onclick="verificarRespuesta(5, 'BUEY')">Comprobar</button>
+        <p class="mensaje-feedback" id="feedback-5"></p>
+    </div>
+    
+    <!-- PASO 6: BÓVEDA / RESTAURANTE -->
+    <div class="contenedor-mision" id="paso-6">
+        <h2>Nivel Final: La Bóveda Secreta</h2>
+        <p>Estáis a un paso. Hay un restaurante en un pueblo de León que es una leyenda mundial. La contraseña de la bóveda es su nombre, un auténtico... (8 letras)</p>
         <div id="boveda-display"></div>
         <div id="boveda-controles">
             <button id="prev-letra">&uarr;</button>
             <button id="next-letra">&darr;</button>
         </div>
         <button class="boton-mision" onclick="verificarBoveda()">Abrir Bóveda</button>
-        <p class="mensaje-feedback" id="feedback-4"></p>
+        <p class="mensaje-feedback" id="feedback-6"></p>
     </div>
 
     <!-- PASO FINAL: SORPRESA -->
     <div class="contenedor-mision" id="paso-final">
-        <h1>¡¡ACCESO CONCEDIDO!!</h1>
-        <h2>¡¡MISIÓN CUMPLIDA, AGENTES!!</h2>
-        <p>El objetivo de la operación es... ¡Un viaje sorpresa para comer la mejor carne del mundo a la Bodega <strong>"El Capricho"</strong> en León!</p>
-        <img src="https://www.bodegaelcapricho.com/wp-content/uploads/2021/03/el-capricho-templo-de-la-carne-1.jpg" onerror="this.onerror=null;this.src='https://placehold.co/600x400/c0392b/FFFFFF?text=El+Capricho';" alt="Imagen de un chuletón de buey de El Capricho">
+        <img src="https://raw.githubusercontent.com/xmol75/sorpresa/main/logo.png" alt="Logo El Capricho" class="logo-final">
+        <h1>¡¡MISIÓN COMPLETADA!!</h1>
+        <p>Vuestra próxima misión es un...<br><strong>¡VIAJE SORPRESA A LEÓN!</strong><br>Con cena el día <strong>29 de Julio</strong> en el templo de la carne...</p>
+        <div class="galeria-final">
+            <img src="https://raw.githubusercontent.com/xmol75/sorpresa/main/buey.jpg" alt="Buey de El Capricho">
+            <img src="https://raw.githubusercontent.com/xmol75/sorpresa/main/carne.jpg" alt="Carne de El Capricho">
+            <img src="https://raw.githubusercontent.com/xmol75/sorpresa/main/mesas.jpeg" alt="Mesas de El Capricho">
+        </div>
     </div>
 
     <script>
         let pasoActual = 1;
 
         function avanzarPaso(numeroPaso) {
-            document.querySelector('.contenedor-mision.activo').classList.remove('activo');
-            document.getElementById(`paso-${numeroPaso}`).classList.add('activo');
+            const pasoActivo = document.querySelector('.contenedor-mision.activo');
+            if (pasoActivo) {
+                pasoActivo.classList.remove('activo');
+            }
+            const siguientePaso = document.getElementById(`paso-${numeroPaso}`);
+            if (siguientePaso) {
+                siguientePaso.classList.add('activo');
+            }
             pasoActual = numeroPaso;
         }
 
@@ -271,43 +347,34 @@
             const feedbackEl = document.getElementById(`feedback-${paso}`);
             feedbackEl.textContent = mensaje;
             feedbackEl.className = 'mensaje-feedback ' + (esError ? 'error' : 'exito');
-        }
-
-        // --- Lógica Paso 2: Acertijo ---
-        function verificarAcertijo() {
-            const respuesta = document.getElementById('respuesta-acertijo').value.toUpperCase();
-            if (respuesta === 'BUEY') {
-                mostrarFeedback(2, 'CLAVE CORRECTA. PROCEDIENDO...', false);
-                setTimeout(() => avanzarPaso(3), 1500);
-            } else {
-                mostrarFeedback(2, 'CLAVE INCORRECTA. INTÉNTALO DE NUEVO.');
-                document.getElementById('respuesta-acertijo').value = '';
+            if (esError) {
+                setTimeout(() => { feedbackEl.textContent = ''; }, 2500);
             }
         }
 
-        // --- Lógica Paso 3: Mapa ---
-        function verificarMapa(event) {
-            const elMapa = event.currentTarget;
-            const rect = elMapa.getBoundingClientRect();
-            // Coordenadas relativas al clic dentro del elemento (en %)
-            const x = (event.clientX - rect.left) / rect.width * 100;
-            const y = (event.clientY - rect.top) / rect.height * 100;
-
-            // Coordenadas aproximadas de Castilla y León en este mapa SVG
-            // El área es un polígono irregular, estas coordenadas definen un rectángulo que lo contiene.
-            const esCorrecto = (x > 20 && x < 58 && y > 28 && y < 55);
+        function verificarRespuesta(paso, respuestaCorrecta) {
+            let esCorrecto = false;
+            if (paso === 2 || paso === 3 || paso === 4) { // Pasos con botones o imágenes
+                esCorrecto = true;
+            } else { // Pasos con campo de texto
+                const input = document.getElementById(`respuesta-paso-${paso}`);
+                const respuestaUsuario = input.value.toUpperCase().trim();
+                esCorrecto = (respuestaUsuario === respuestaCorrecta);
+            }
 
             if (esCorrecto) {
-                mostrarFeedback(3, 'POSICIÓN CONFIRMADA. DESBLOQUEANDO NIVEL FINAL...', false);
-                elMapa.style.cursor = 'default';
-                elMapa.onclick = null; // Desactivar más clics
-                setTimeout(() => avanzarPaso(4), 1500);
+                mostrarFeedback(paso, 'RESPUESTA CORRECTA. TRANSMITIENDO DATOS...', false);
+                setTimeout(() => {
+                    avanzarPaso(paso + 1);
+                }, 1500);
             } else {
-                mostrarFeedback(3, 'SEÑAL DÉBIL. APUNTA A OTRA ZONA.');
+                mostrarFeedback(paso, 'ACCESO DENEGADO. INTÉNTALO DE NUEVO.');
+                const input = document.getElementById(`respuesta-paso-${paso}`);
+                if (input) input.value = '';
             }
         }
-        
-        // --- Lógica Paso 4: Bóveda ---
+
+        // --- Lógica de la Bóveda (Paso 6) ---
         const codigoBoveda = "CAPRICHO";
         const alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         let estadoBoveda = Array(codigoBoveda.length).fill(0);
@@ -315,7 +382,6 @@
         const bovedaDisplay = document.getElementById('boveda-display');
 
         function inicializarBoveda() {
-            // Limpiar por si se reinicia
             bovedaDisplay.innerHTML = '';
             for (let i = 0; i < codigoBoveda.length; i++) {
                 const letraDiv = document.createElement('div');
@@ -353,11 +419,13 @@
         function verificarBoveda() {
             const intento = estadoBoveda.map(i => alfabeto[i]).join('');
             if (intento === codigoBoveda) {
-                mostrarFeedback(4, 'BÓVEDA ABIERTA. REVELANDO OBJETIVO...', false);
-                setTimeout(() => avanzarPaso('final'), 1500);
-                lanzarConfeti();
+                mostrarFeedback(6, 'BÓVEDA ABIERTA. REVELANDO OBJETIVO...', false);
+                setTimeout(() => {
+                    avanzarPaso('final');
+                    lanzarConfeti();
+                }, 1500);
             } else {
-                mostrarFeedback(4, 'CONTRASEÑA INCORRECTA. SISTEMA DE SEGURIDAD ACTIVADO.');
+                mostrarFeedback(6, 'CONTRASEÑA INCORRECTA. SISTEMA DE SEGURIDAD ACTIVADO.');
             }
         }
 
@@ -365,7 +433,7 @@
         function lanzarConfeti() {
             const contenedor = document.getElementById('confeti-contenedor');
             const colores = ['#FBBF24', '#F87171', '#34D399', '#60A5FA', '#E5E7EB'];
-            for (let i = 0; i < 150; i++) {
+            for (let i = 0; i < 200; i++) {
                 const confeti = document.createElement('div');
                 confeti.classList.add('confeti');
                 confeti.style.left = Math.random() * 100 + 'vw';
@@ -376,9 +444,7 @@
             }
         }
         
-        // Inicializar la bóveda cuando se carga el script
         inicializarBoveda();
-
     </script>
 </body>
 </html>
